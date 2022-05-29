@@ -1,21 +1,21 @@
-package task1;
+package com.moshkova.task1;
 
 import java.util.BitSet;
 
 /**
  * Save for IP address as one bit in BitSet array
- *
+ * <p>
  * Created by e.moshkova on 21.05.22
  */
-public class BitSetSave {
+public class BitSetCase {
 
     private BitSet[] bitset;
-    public static final short CHUNK_SIZE = 2;
+    private final short CASE_SIZE = 2;
 
-    public BitSetSave() {
+    public BitSetCase() {
 
-        bitset = new BitSet[CHUNK_SIZE];
-        for (int i = 0; i < CHUNK_SIZE; i++) {
+        bitset = new BitSet[CASE_SIZE];
+        for (int i = 0; i < CASE_SIZE; i++) {
             bitset[i] = new BitSet(Integer.MAX_VALUE);
         }
     }
@@ -26,9 +26,18 @@ public class BitSetSave {
      *
      * @param ipDecimal IPv4 address in decimal format
      */
-    public void pushToSet(long ipDecimal) {
+    void pushToSet(long ipDecimal) {
 
         bitset[getChunkIndex(ipDecimal)].set(getIpBitSetIndex(ipDecimal));
+    }
+
+    long getSize() {
+
+        long total = 0;
+        for (int i = 0; i < CASE_SIZE; i++) {
+            total += bitset[i].cardinality();
+        }
+        return total;
     }
 
     /**
@@ -37,7 +46,7 @@ public class BitSetSave {
      * @param ipDecimal IPv4 address in decimal format
      * @return Position in BitSet with value 0 <= Integer.MAX_VALUE
      */
-    public static int getIpBitSetIndex(long ipDecimal) {
+    private int getIpBitSetIndex(long ipDecimal) {
         int index = (int) ipDecimal;
 
         return index >= 0 ? index : index - Integer.MAX_VALUE - 1;
@@ -47,19 +56,9 @@ public class BitSetSave {
      * @param ipDecimal IPv4 address in decimal format
      * @return BitSet[] chunk number for given IP address
      */
-    public static int getChunkIndex(long ipDecimal) {
+    private int getChunkIndex(long ipDecimal) {
 
         return ipDecimal <= Integer.MAX_VALUE ? 0 : 1;
-    }
-
-    public long getResult() {
-
-        long total = 0;
-        for (int i = 0; i < CHUNK_SIZE; i++) {
-            total += bitset[i].cardinality();
-        }
-
-        return total;
     }
 }
 
